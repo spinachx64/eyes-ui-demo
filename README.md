@@ -1,6 +1,6 @@
 # Eyes Lab — Two-Eye Procedural UI Demo
 
-一个只用两只眼睛表达表情的可移植 UI 实验项目。**原创实现**，没有使用或复制 Hermes Watch 的 AGPL 代码。
+一个只用两只眼睛表达表情的可移植 UI 实验项目。
 
 ## 立即体验：Mac / Windows / Linux / 手机浏览器
 
