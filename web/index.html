@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f0e9">
+  <title>Eyes Lab — 两只眼睛的表情实验室</title>
+  <style>
+    :root{--paper:#f4f0e9;--ink:#201f1c;--muted:#807d75;--edge:#ddd8cf;--white:#fffefa;--accent:#cb664f;--accent-faint:#f8e7df;--mint:#bddbd0}
+    *{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}
+    .shell{max-width:1370px;margin:0 auto;padding:32px 36px 42px}header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:28px}
+    .eyebrow{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.2em;font-weight:800;color:#5b5b54}.tag{display:inline-flex;align-items:center;padding:5px 8px;border:1px solid #c9c3b8;border-radius:6px;color:var(--accent);letter-spacing:.1em}
+    h1{font-size:clamp(29px,3.3vw,47px);letter-spacing:-.055em;margin:12px 0 9px;line-height:1.22;font-weight:760}h1 span{color:var(--accent)}.lead{margin:0;color:#716d65;font-size:14px;line-height:1.8}.version{font-size:11px;color:#858078;text-align:right;line-height:1.7;white-space:nowrap}
+    main{display:grid;grid-template-columns:minmax(0,1.34fr) minmax(330px,.9fr);gap:24px;align-items:stretch}
+    .stage{position:relative;min-height:665px;background:#e9e4db;border:1px solid #d9d3ca;border-radius:24px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:45px 22px 22px;isolation:isolate}
+    .stage:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#aba79f77 .8px,transparent .8px);background-size:20px 20px;opacity:.35;z-index:-1}
+    .stage-head{position:absolute;top:22px;left:27px;right:27px;display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:.13em;color:#79746a}.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#6caf85;margin-right:7px;box-shadow:0 0 0 4px #6caf851a}
+    .device-wrap{display:flex;align-items:center;justify-content:center;width:100%;flex:1;min-height:460px}
+    .device{position:relative;display:grid;place-items:center;width:min(100%,478px);aspect-ratio:1/1;border-radius:50%;padding:12px;background:linear-gradient(145deg,#bdb9b1,#242525 22%,#111213 63%,#b4aea4);box-shadow:0 18px 46px #2b27243c,0 4px 5px #fff6 inset,0 0 0 1px #333}
+    .device:after{content:"";position:absolute;inset:5px;border-radius:inherit;border:1px solid #fff2;pointer-events:none}
+    .screen{width:100%;height:100%;background:#090b0b;border-radius:50%;overflow:hidden;position:relative;box-shadow:0 0 0 3px #080809,0 0 18px #000d inset}
+    .screen canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+    .device.rect{width:min(100%,480px);aspect-ratio:4/3;border-radius:22px;padding:11px}
+    .device.rect .screen{border-radius:12px}
+    .device-label{position:absolute;bottom:-32px;color:#aaa397;letter-spacing:.22em;font-size:10px;font-weight:800;text-align:center;width:100%}
+    .stage-bottom{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px;margin-top:40px;font-size:11px;color:#807a70}.stage-bottom .hint{font-weight:600}.signal{display:flex;align-items:center;gap:6px}.bars{display:flex;align-items:flex-end;gap:2px;height:11px}.bars i{display:block;background:#bc8c77;width:3px;height:4px;border-radius:1px}.bars i:nth-child(2){height:7px}.bars i:nth-child(3){height:11px}
+    .panel{background:var(--white);border:1px solid var(--edge);border-radius:24px;padding:28px 27px;display:flex;flex-direction:column;min-height:665px;box-shadow:0 3px 14px #24201b08}
+    .panel-top{display:flex;justify-content:space-between;align-items:flex-start}.num{font-size:11px;font-weight:850;letter-spacing:.18em;color:var(--accent)}h2{font-size:23px;line-height:1.25;margin:7px 0 8px;letter-spacing:-.04em}.sub{font-size:12px;color:#9a948b;line-height:1.6;margin:0}.pill{padding:6px 9px;border:1px solid #e8dfd5;border-radius:100px;color:#9a8d7d;font-size:10px;font-weight:800;letter-spacing:.07em}
+    .status{display:flex;align-items:center;justify-content:space-between;margin-top:23px;margin-bottom:14px;background:#f5f2ed;border:1px solid #eee9e0;border-radius:14px;padding:14px 17px}.status small{display:block;color:#aba198;font-size:10px;letter-spacing:.12em;font-weight:700}.status strong{font-size:21px;letter-spacing:-.03em}.status strong span{font-size:11px;color:var(--accent);letter-spacing:.13em;margin-left:8px}.frame{display:flex;align-items:center;gap:7px;font-size:11px;color:#8b827a;font-weight:700}.frame b{font-variant-numeric:tabular-nums;font-size:19px;color:#444}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0 12px}.section-title b{font-size:12px;letter-spacing:.02em}.section-title span{font-size:10px;color:#a5a096}
+    .emotions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+    .emotion{border:1px solid #eae5dc;background:#faf9f6;border-radius:12px;min-height:67px;padding:9px 3px 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#59544e;transition:transform .15s,background .2s,border .2s}
+    .emotion:hover{transform:translateY(-2px);border-color:#d6ad9f}.emotion[aria-pressed="true"]{background:var(--accent-faint);border-color:#d58a73;color:#9a3a27;box-shadow:0 0 0 1px #d58a731e inset}.emotion .eyesicon{display:flex;align-items:center;gap:7px;height:18px}.emotion .eyesicon i{display:block;width:9px;height:17px;border-radius:100px;background:currentColor;transform:rotate(var(--angle,0deg)) scaleY(var(--s,1))}.emotion .label{font-size:11px;font-weight:700;white-space:nowrap}
+    .controls{border-top:1px solid #ece6dd;margin-top:19px;padding-top:12px}.control-row{display:flex;align-items:center;justify-content:space-between;margin:12px 0;color:#554f47;font-size:12px}.value{color:#ad6853;font-variant-numeric:tabular-nums;font-weight:800}input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;height:16px}
+    .switch-row{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0 0}.switch{display:flex;align-items:center;gap:7px;border-radius:9px;background:#f5f2ec;border:1px solid #eee7dc;padding:9px 10px;font-size:11px;font-weight:700;color:#777066;user-select:none;cursor:pointer}.switch:has(input:checked){background:#f8eae4;color:#ad5a46;border-color:#e7bcad}.switch input{margin:0;width:14px;height:14px;accent-color:var(--accent)}
+    .actions{display:flex;gap:9px;margin-top:auto;padding-top:20px}.action{border:1px solid #e0d9d0;background:var(--white);border-radius:12px;flex:1;padding:12px 6px;color:#4d4641;font-size:12px;font-weight:760;transition:all .18s}.action:hover{border-color:#c9a192}.action.primary{background:#242320;border-color:#242320;color:#fffaf2}.action.primary:hover{background:#50443b}
+    footer{display:flex;justify-content:space-between;gap:15px;margin-top:18px;font-size:11px;color:#a19990}footer .tech{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px}
+    @media(max-width:980px){.shell{padding:24px 15px}main{grid-template-columns:1fr}.panel{min-height:unset}.stage{min-height:590px}.device{max-width:440px}.device-wrap{min-height:450px}}
+    @media(max-width:580px){header{flex-direction:column}.version{text-align:left}.stage{min-height:460px;padding:45px 12px 20px;border-radius:15px}.device-wrap{min-height:340px}.device{max-width:min(95%,340px)}.device.rect{max-width:340px}.device-label{bottom:-26px}.stage-bottom{margin-top:30px;font-size:9px}.panel{padding:19px 15px;border-radius:15px}.emotions{gap:5px}.emotion{min-height:63px}.shell{padding-bottom:22px}footer{flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){.emotion{transition:none}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div>
+      <div class="eyebrow"><span class="tag">EYES LAB / 01</span> EMBEDDED MOTION STUDY</div>
+      <h1>两只眼睛，<span>也能有情绪。</span></h1>
+      <p class="lead">程序化几何绘制 · 关键帧平滑过渡 · 呼吸微动 · 自动眨眼 · 视线跟踪</p>
+    </div>
+    <div class="version">BROWSER PROTOTYPE<br>OFFLINE · NO DEPENDENCIES<br>466 × 466 / 320 × 240</div>
+  </header>
+  <main>
+    <section class="stage" aria-label="交互动画预览">
+      <div class="stage-head"><span><span class="live-dot"></span>REAL-TIME PREVIEW</span><span id="viewport-label">ROUND / 466</span></div>
+      <div class="device-wrap">
+        <div class="device" id="device">
+          <div class="screen" id="screen"><canvas id="eyes" aria-label="两只可交互的动画眼睛"></canvas></div>
+          <div class="device-label">MINIMAL AVATAR · PROCEDURAL RENDERING</div>
+        </div>
+      </div>
+      <div class="stage-bottom"><span class="hint">移动鼠标看向你 · 点击屏幕眨眼</span><span class="signal"><span class="bars"><i></i><i></i><i></i></span> CANVAS 2D</span></div>
+    </section>
+    <section class="panel">
+      <div class="panel-top"><div><span class="num">01 / EXPRESSION</span><h2>微表情实验台</h2><p class="sub">仅使用两只眼睛的形状与运动表达情绪。</p></div><span class="pill">MVP 0.1</span></div>
+      <div class="status"><div><small>CURRENT EMOTION</small><strong id="mood-name">平静 <span>NEUTRAL</span></strong></div><div class="frame"><b id="fps">60</b> FPS</div></div>
+      <div class="section-title"><b>切换表情</b><span>10 种 / KEYFRAMES</span></div>
+      <div class="emotions" id="emotions"></div>
+      <div class="controls">
+        <div class="section-title"><b>动画参数</b><span>LIVE TUNING</span></div>
+        <div class="control-row"><label for="energy">灵动程度</label><span class="value" id="energy-value">70%</span></div>
+        <input type="range" id="energy" min="0" max="100" value="70" aria-label="灵动程度">
+        <div class="control-row"><label for="speed">表情过渡</label><span class="value" id="speed-value">320ms</span></div>
+        <input type="range" id="speed" min="100" max="750" step="10" value="320" aria-label="表情过渡时间">
+        <div class="switch-row">
+          <label class="switch"><input type="checkbox" id="auto"> 自动巡演</label>
+          <label class="switch"><input type="checkbox" id="follow" checked> 追踪指针</label>
+          <label class="switch"><input type="checkbox" id="micro" checked> 随机微动</label>
+        </div>
+      </div>
+      <div class="actions"><button class="action primary" id="blink">眨一下眼 ↗</button><button class="action" id="mode">切换方屏预览</button><button class="action" id="reset">复位</button></div>
+    </section>
+  </main>
+  <footer><span>模型：EyePose + Emotion Presets + Spring + Blink + Gaze</span><span class="tech">NO SVG / NO GIF / NO PNG FRAME ANIMATIONS</span></footer>
+</div>
+<script type="application/json" id="presets-data">{"design":{"width":466,"height":466,"background":"#090b0b","eye":"#f5f3e9"},"emotions":[{"id":"idle","name":"平静","en":"NEUTRAL","left":{"x":-79,"y":0,"w":54,"h":86,"angle":0,"lid":0,"tilt":0,"curve":0},"right":{"x":79,"y":0,"w":54,"h":86,"angle":0,"lid":0,"tilt":0,"curve":0}},{"id":"happy","name":"开心","en":"HAPPY","left":{"x":-79,"y":10,"w":90,"h":24,"angle":-12,"lid":0,"tilt":0,"curve":-9},"right":{"x":79,"y":10,"w":90,"h":24,"angle":12,"lid":0,"tilt":0,"curve":-9}},{"id":"excited","name":"兴奋","en":"EXCITED","left":{"x":-81,"y":-10,"w":64,"h":116,"angle":-13,"lid":0,"tilt":0,"curve":0},"right":{"x":81,"y":-10,"w":64,"h":116,"angle":13,"lid":0,"tilt":0,"curve":0}},{"id":"thinking","name":"思考","en":"THINKING","left":{"x":-81,"y":7,"w":54,"h":77,"angle":6,"lid":0.08,"tilt":0,"curve":0},"right":{"x":80,"y":-12,"w":53,"h":45,"angle":-9,"lid":0.1,"tilt":0,"curve":0}},{"id":"angry","name":"生气","en":"ANGRY","left":{"x":-79,"y":4,"w":67,"h":54,"angle":-23,"lid":0.18,"tilt":0.35,"curve":0},"right":{"x":79,"y":4,"w":67,"h":54,"angle":23,"lid":0.18,"tilt":-0.35,"curve":0}},{"id":"sad","name":"难过","en":"SAD","left":{"x":-78,"y":15,"w":66,"h":37,"angle":16,"lid":0.2,"tilt":-0.15,"curve":8},"right":{"x":78,"y":15,"w":66,"h":37,"angle":-16,"lid":0.2,"tilt":0.15,"curve":8}},{"id":"surprised","name":"惊讶","en":"SURPRISED","left":{"x":-79,"y":-8,"w":61,"h":111,"angle":0,"lid":0,"tilt":0,"curve":0},"right":{"x":79,"y":-8,"w":61,"h":111,"angle":0,"lid":0,"tilt":0,"curve":0}},{"id":"confused","name":"疑惑","en":"CONFUSED","left":{"x":-79,"y":16,"w":80,"h":29,"angle":-17,"lid":0.16,"tilt":0,"curve":0},"right":{"x":79,"y":-9,"w":58,"h":98,"angle":9,"lid":0.02,"tilt":0,"curve":0}},{"id":"sleepy","name":"困倦","en":"SLEEPY","left":{"x":-79,"y":17,"w":70,"h":22,"angle":-3,"lid":0.18,"tilt":0,"curve":0},"right":{"x":79,"y":17,"w":70,"h":22,"angle":3,"lid":0.18,"tilt":0,"curve":0}},{"id":"wink","name":"眨单眼","en":"WINK","left":{"x":-79,"y":12,"w":85,"h":14,"angle":-11,"lid":0,"tilt":0,"curve":-6},"right":{"x":79,"y":-1,"w":54,"h":93,"angle":-3,"lid":0,"tilt":0,"curve":0}}]}</script>
+<script>
+(()=>{
+  'use strict';
+  const MODEL=JSON.parse(document.getElementById('presets-data').textContent);
+  const presets=MODEL.emotions;
+  const canvas=document.getElementById('eyes'),ctx=canvas.getContext('2d',{alpha:false});
+  const device=document.getElementById('device'),grid=document.getElementById('emotions');
+  const btnBlink=document.getElementById('blink'),btnMode=document.getElementById('mode');
+  const inputEnergy=document.getElementById('energy'),inputSpeed=document.getElementById('speed');
+  const inputAuto=document.getElementById('auto'),inputFollow=document.getElementById('follow'),inputMicro=document.getElementById('micro');
+  let activeIndex=0,mode='round',w=466,h=466,scale=1,now=performance.now(),last=now,blinkAt=now+1100,blinkStart=-1000,autoLast=now;
+  let nextGaze=now+1800,randomGazeX=0,randomGazeY=0,manualGazeX=0,manualGazeY=0,hover=false;
+  const gaze={x:0,y:0},keys=['x','y','w','h','angle','lid','tilt','curve'];
+  const state={left:{},right:{}},velocity={left:{},right:{}};
+  for(const side of ['left','right'])for(const k of keys){state[side][k]=presets[0][side][k];velocity[side][k]=0;}
+  let fpsSmoothed=60,fpsCount=0,fpsTick=now;
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const ease=t=>t*t*(3-2*t);
+  function refreshSize(){
+    [w,h]=mode==='round'?[466,466]:[320,240];
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    scale=mode==='round'?1:Math.min(w/466*1.15,h/466*1.5);
+    document.getElementById('viewport-label').textContent=mode==='round'?'ROUND / 466':'RECT / 320 × 240';
+  }
+  function iconFor(p){
+    const e=document.createElement('span');e.className='eyesicon';
+    for(const side of ['left','right']){
+      const el=document.createElement('i');const pose=p[side];
+      el.style.setProperty('--s',String(clamp(pose.h/70,.17,1.1)));
+      el.style.setProperty('--angle',String(pose.angle)+'deg');e.appendChild(el);
+    }
+    return e;
+  }
+  presets.forEach((p,i)=>{
+    const b=document.createElement('button');b.className='emotion';b.type='button';
+    b.setAttribute('aria-pressed',String(i===0));b.title=p.en;
+    b.append(iconFor(p));const label=document.createElement('span');label.className='label';label.textContent=p.name;b.append(label);
+    b.addEventListener('click',()=>selectMood(i));grid.appendChild(b);
+  });
+  function selectMood(i,fromAuto=false){
+    activeIndex=(i+presets.length)%presets.length;autoLast=performance.now();
+    const p=presets[activeIndex];
+    const title=document.getElementById('mood-name');title.textContent=p.name+' ';
+    const en=document.createElement('span');en.textContent=p.en;title.appendChild(en);
+    [...grid.children].forEach((b,j)=>b.setAttribute('aria-pressed',String(j===activeIndex)));
+    if(!fromAuto)inputAuto.checked=false;
+  }
+  function blink(){blinkStart=performance.now();blinkAt=blinkStart+1800+Math.random()*3700;}
+  function blinkAmount(ms){
+    const p=(ms-blinkStart)/280;
+    if(p<0||p>1)return 0;
+    return p<.4?ease(p/.4):ease((1-p)/.6);
+  }
+  function eyePath(width,height,curve){
+    const path=new Path2D(),left=-width/2,right=width/2,top=-height/2,bottom=height/2;
+    const r=Math.min(width,height)/2;
+    if(width>height*1.3&&Math.abs(curve)>0.1){
+      path.moveTo(left+r,top);
+      path.bezierCurveTo(left+width*.32,top+curve,right-width*.32,top+curve,right-r,top);
+      path.quadraticCurveTo(right,top,right,0);
+      path.quadraticCurveTo(right,bottom,right-r,bottom);
+      path.bezierCurveTo(right-width*.32,bottom+curve,left+width*.32,bottom+curve,left+r,bottom);
+      path.quadraticCurveTo(left,bottom,left,0);
+      path.quadraticCurveTo(left,top,left+r,top);
+    }else path.roundRect(left,top,width,height,r);
+    path.closePath();return path;
+  }
+  function paintEye(e,side,blinkFactor,time){
+    const energy=Number(inputEnergy.value)/100;
+    const bounce=activeIndex===2?Math.sin(time*.012)*7*energy:0;
+    const bob=inputMicro.checked?(Math.sin(time*.00128)*2.8*energy+bounce):0;
+    const shake=inputMicro.checked?(Math.sin(time*.0031+(side==='left'?0:1))*1.2*energy):0;
+    const cx=w/2+(e.x+gaze.x*9+shake)*scale;
+    const cy=h/2+(e.y+gaze.y*8+bob)*scale;
+    const eWidth=Math.max(3,e.w*scale);
+    const eHeight=Math.max(2.4,e.h*(1-blinkFactor*.94)*scale);
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(e.angle*Math.PI/180);
+    const path=eyePath(eWidth,eHeight,e.curve*scale);
+    ctx.shadowColor='rgba(250,247,230,.40)';ctx.shadowBlur=5*scale;
+    ctx.fillStyle='#f5f3e9';ctx.fill(path);
+    ctx.shadowBlur=0;
+    if(e.lid>0.001){
+      ctx.save();ctx.clip(path);ctx.fillStyle='#090b0b';
+      const top=-eHeight/2-3;const cover=eHeight*e.lid;
+      ctx.beginPath();ctx.moveTo(-eWidth/2-4,top);ctx.lineTo(eWidth/2+4,top);
+      ctx.lineTo(eWidth/2+4,top+cover+e.tilt*eHeight*.5);
+      ctx.lineTo(-eWidth/2-4,top+cover-e.tilt*eHeight*.5);
+      ctx.closePath();ctx.fill();ctx.restore();
+    }
+    ctx.restore();
+  }
+  function update(dt,time){
+    if(inputAuto.checked&&time-autoLast>3300){selectMood(activeIndex+1,true);}
+    if(time>=blinkAt)blink();
+    if(inputMicro.checked&&!hover&&time>nextGaze){
+      randomGazeX=(Math.random()*2-1)*.85;randomGazeY=(Math.random()*2-1)*.55;
+      nextGaze=time+1350+Math.random()*2400;
+    }
+    const targetGazeX=hover&&inputFollow.checked?manualGazeX:(inputMicro.checked?randomGazeX:0);
+    const targetGazeY=hover&&inputFollow.checked?manualGazeY:(inputMicro.checked?randomGazeY:0);
+    let gk=1-Math.exp(-dt/120);
+    gaze.x+=(targetGazeX-gaze.x)*gk;gaze.y+=(targetGazeY-gaze.y)*gk;
+    // Critically-ish damped spring system; overshoot is allowed but bounded.
+    const transition=Number(inputSpeed.value),omega=clamp(4900/transition,6,50),zeta=.82,s=dt/1000;
+    for(const side of ['left','right'])for(const key of keys){
+      const target=presets[activeIndex][side][key];
+      let value=state[side][key],vel=velocity[side][key];
+      vel+=((target-value)*omega*omega-2*zeta*omega*vel)*s;
+      value+=vel*s;
+      if(key==='w'||key==='h')value=Math.max(3,value);
+      state[side][key]=value;velocity[side][key]=vel;
+    }
+    ctx.fillStyle='#090b0b';ctx.fillRect(0,0,w,h);
+    const b=blinkAmount(time);
+    paintEye(state.left,'left',b,time);paintEye(state.right,'right',b,time);
+  }
+  function frame(t){
+    const dt=clamp(t-last,1,33);last=t;
+    update(dt,t);fpsCount++;
+    if(t-fpsTick>650){fpsSmoothed=fpsCount*1000/(t-fpsTick);fpsCount=0;fpsTick=t;document.getElementById('fps').textContent=String(Math.round(fpsSmoothed));}
+    requestAnimationFrame(frame);
+  }
+  function onPointer(evt){
+    const rect=canvas.getBoundingClientRect();const x=(evt.clientX-rect.left)/rect.width,y=(evt.clientY-rect.top)/rect.height;
+    manualGazeX=clamp((x-.5)*2,-1,1);manualGazeY=clamp((y-.5)*2,-1,1);hover=true;
+  }
+  canvas.addEventListener('pointermove',onPointer);
+  canvas.addEventListener('pointerenter',onPointer);
+  canvas.addEventListener('pointerleave',()=>{hover=false;});
+  canvas.addEventListener('pointerdown',e=>{onPointer(e);blink();});
+  btnBlink.addEventListener('click',blink);
+  btnMode.addEventListener('click',()=>{
+    mode=mode==='round'?'rect':'round';device.classList.toggle('rect',mode==='rect');
+    btnMode.textContent=mode==='round'?'切换方屏预览':'切换圆屏预览';refreshSize();
+  });
+  document.getElementById('reset').addEventListener('click',()=>{
+    inputEnergy.value=70;inputSpeed.value=320;inputAuto.checked=false;inputMicro.checked=true;inputFollow.checked=true;
+    document.getElementById('energy-value').textContent='70%';document.getElementById('speed-value').textContent='320ms';
+    selectMood(0);blink();
+  });
+  inputEnergy.addEventListener('input',()=>document.getElementById('energy-value').textContent=inputEnergy.value+'%');
+  inputSpeed.addEventListener('input',()=>document.getElementById('speed-value').textContent=inputSpeed.value+'ms');
+  window.addEventListener('keydown',e=>{
+    if(e.target.matches('input,button'))return;
+    if(e.code==='Space'){e.preventDefault();blink();}
+    if(e.key==='0')selectMood(9);
+    else if(/^[1-9]$/.test(e.key))selectMood(Number(e.key)-1);
+    else if(e.key==='ArrowRight')selectMood(activeIndex+1);
+    else if(e.key==='ArrowLeft')selectMood(activeIndex-1);
+  });
+  document.addEventListener('visibilitychange',()=>{last=performance.now()});
+  refreshSize();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

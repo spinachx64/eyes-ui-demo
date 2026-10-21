@@ -1,0 +1,4 @@
+version: "0.1.0"
+description: "Procedural two-eye expressions and animation, independent of display hardware"
+dependencies:
+  idf: ">=5.1"

@@ -1,0 +1,15 @@
+{
+  "design": {"width": 466, "height": 466, "background": "#090b0b", "eye": "#f5f3e9"},
+  "emotions": [
+    {"id":"idle", "name":"平静", "en":"NEUTRAL", "left":{"x":-79,"y":0,"w":54,"h":86,"angle":0,"lid":0,"tilt":0,"curve":0}, "right":{"x":79,"y":0,"w":54,"h":86,"angle":0,"lid":0,"tilt":0,"curve":0}},
+    {"id":"happy", "name":"开心", "en":"HAPPY", "left":{"x":-79,"y":10,"w":90,"h":24,"angle":-12,"lid":0,"tilt":0,"curve":-9}, "right":{"x":79,"y":10,"w":90,"h":24,"angle":12,"lid":0,"tilt":0,"curve":-9}},
+    {"id":"excited", "name":"兴奋", "en":"EXCITED", "left":{"x":-81,"y":-10,"w":64,"h":116,"angle":-13,"lid":0,"tilt":0,"curve":0}, "right":{"x":81,"y":-10,"w":64,"h":116,"angle":13,"lid":0,"tilt":0,"curve":0}},
+    {"id":"thinking", "name":"思考", "en":"THINKING", "left":{"x":-81,"y":7,"w":54,"h":77,"angle":6,"lid":0.08,"tilt":0,"curve":0}, "right":{"x":80,"y":-12,"w":53,"h":45,"angle":-9,"lid":0.1,"tilt":0,"curve":0}},
+    {"id":"angry", "name":"生气", "en":"ANGRY", "left":{"x":-79,"y":4,"w":67,"h":54,"angle":-23,"lid":0.18,"tilt":0.35,"curve":0}, "right":{"x":79,"y":4,"w":67,"h":54,"angle":23,"lid":0.18,"tilt":-0.35,"curve":0}},
+    {"id":"sad", "name":"难过", "en":"SAD", "left":{"x":-78,"y":15,"w":66,"h":37,"angle":16,"lid":0.2,"tilt":-0.15,"curve":8}, "right":{"x":78,"y":15,"w":66,"h":37,"angle":-16,"lid":0.2,"tilt":0.15,"curve":8}},
+    {"id":"surprised", "name":"惊讶", "en":"SURPRISED", "left":{"x":-79,"y":-8,"w":61,"h":111,"angle":0,"lid":0,"tilt":0,"curve":0}, "right":{"x":79,"y":-8,"w":61,"h":111,"angle":0,"lid":0,"tilt":0,"curve":0}},
+    {"id":"confused", "name":"疑惑", "en":"CONFUSED", "left":{"x":-79,"y":16,"w":80,"h":29,"angle":-17,"lid":0.16,"tilt":0,"curve":0}, "right":{"x":79,"y":-9,"w":58,"h":98,"angle":9,"lid":0.02,"tilt":0,"curve":0}},
+    {"id":"sleepy", "name":"困倦", "en":"SLEEPY", "left":{"x":-79,"y":17,"w":70,"h":22,"angle":-3,"lid":0.18,"tilt":0,"curve":0}, "right":{"x":79,"y":17,"w":70,"h":22,"angle":3,"lid":0.18,"tilt":0,"curve":0}},
+    {"id":"wink", "name":"眨单眼", "en":"WINK", "left":{"x":-79,"y":12,"w":85,"h":14,"angle":-11,"lid":0,"tilt":0,"curve":-6}, "right":{"x":79,"y":-1,"w":54,"h":93,"angle":-3,"lid":0,"tilt":0,"curve":0}}
+  ]
+}
